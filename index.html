@@ -5,56 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Customer & Dealer Form</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { background: #0d6efd; color: #fff; padding: 10px; border-radius: 5px; }
-    form { max-width: 1200px; margin: auto; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    h2 { background: #0d6efd; color: #fff; padding: 8px; margin: 0; font-size: 18px; }
+    form { max-width: 1000px; margin: auto; padding: 10px; }
 
-    /* 🔹 3-column grid layout */
+    /* Grid Layout */
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 15px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
 
-    .form-grid label { display: block; font-weight: bold; margin-top: 6px; }
+    .form-grid label { display: block; font-weight: bold; font-size: 13px; }
     .form-grid input,
     .form-grid select,
     .form-grid textarea {
       width: 100%;
       padding: 6px;
-      margin-top: 4px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    /* Full width rows (textarea etc.) */
-    .full-width {
-      grid-column: span 3;
-    }
+    /* Full width rows */
+    .full-width { grid-column: span 3; }
 
-    /* Fixed Submit Button */
-    button {
+    /* Fixed Submit Button - अलग और साफ */
+    .submit-btn {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      padding: 14px 28px;
       background: #28a745;
       color: white;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
+      padding: 14px 30px;
       font-size: 16px;
       font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       z-index: 1000;
     }
-    button:hover { background: #218838; }
+    .submit-btn:hover { background: #218838; }
 
-    /* Responsive for mobile */
+    /* Responsive for Mobile */
     @media(max-width:768px){
       .form-grid { grid-template-columns: 1fr; }
       .full-width { grid-column: span 1; }
-      button {
+      .submit-btn {
         width: 90%;
         left: 5%;
         right: 5%;
@@ -67,9 +65,7 @@
   <form id="dataForm">
     <div class="form-grid">
       <div><label>Customer Name</label><input name="CustomerName" required></div>
-      <div><label>Gender</label>
-        <select name="Gender"><option>Male</option><option>Female</option><option>Other</option></select>
-      </div>
+      <div><label>Gender</label><select name="Gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
       <div><label>Date of Birth</label><input type="date" name="DOB"></div>
 
       <div><label>Aadhar Number</label><input name="Aadhar"></div>
@@ -90,10 +86,7 @@
       <div><label>Insurance Premium</label><input name="InsurancePremium"></div>
       <div><label>Payment Mode</label><input name="PaymentMode"></div>
 
-      <div><label>Uploaded Documents?</label>
-        <select name="DocsUploaded"><option>Yes</option><option>No</option></select>
-      </div>
-
+      <div><label>Uploaded Documents?</label><select name="DocsUploaded"><option>Yes</option><option>No</option></select></div>
       <div class="full-width"><label>Remarks / Notes</label><textarea name="Remarks"></textarea></div>
     </div>
 
@@ -102,16 +95,16 @@
       <div><label>Dealer Name</label><input name="DealerName"></div>
       <div><label>Shop Name</label><input name="ShopName"></div>
       <div><label>Dealer Contact</label><input name="DealerContact"></div>
-
       <div><label>Dealer ID</label><input name="DealerID"></div>
       <div class="full-width"><label>Dealer Address</label><textarea name="DealerAddress"></textarea></div>
     </div>
-
-    <button type="submit">Submit</button>
   </form>
 
+  <!-- Fixed Submit Button -->
+  <button type="submit" form="dataForm" class="submit-btn">Submit</button>
+
   <script>
-    const scriptURL = "YOUR_GOOGLE_SCRIPT_WEBAPP_URL"; // यहां अपना Google Apps Script link डालो
+    const scriptURL = "YOUR_GOOGLE_SCRIPT_WEBAPP_URL"; 
     const form = document.getElementById("dataForm");
 
     form.addEventListener("submit", e => {
