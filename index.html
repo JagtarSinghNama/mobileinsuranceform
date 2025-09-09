@@ -8,27 +8,24 @@
     body { 
       font-family: Arial, sans-serif; 
       margin: 0; 
-      background: #f4f6f9; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh;
+      padding: 10px;
+      background: #fff;   /* पूरी screen पर सफेद background */
     }
-    .form-box {
-  background: #fff;
-  max-width: 900px;
-  width: 95%;
-  margin: 20px;
-  padding: 20px;
-  border-radius: 0;      /* गोल कोने हटाने के लिए */
-  box-shadow: none;      /* shadow हटाने के लिए */
-    };
     h2 { 
       background: #0d6efd; 
       color: #fff; 
       padding: 10px; 
       border-radius: 5px; 
       font-size: 18px;
+    }
+    .form-box {
+      background: transparent;  /* कोई अलग box नहीं */
+      max-width: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
     form { width: 100%; }
     label { 
