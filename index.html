@@ -7,46 +7,58 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     h2 { background: #0d6efd; color: #fff; padding: 10px; border-radius: 5px; }
-    form { max-width: 1000px; margin: auto; }
+    form { max-width: 1200px; margin: auto; }
 
-    /* 🔑 Grid layout for 2 columns */
+    /* 🔹 3-column grid layout */
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
     }
 
-    .form-grid label { display: block; font-weight: bold; margin-top: 10px; }
+    .form-grid label { display: block; font-weight: bold; margin-top: 6px; }
     .form-grid input,
     .form-grid select,
     .form-grid textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 6px;
+      margin-top: 4px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      font-size: 14px;
     }
 
-    /* Full width items */
+    /* Full width rows (textarea etc.) */
     .full-width {
-      grid-column: span 2;
+      grid-column: span 3;
     }
 
+    /* Fixed Submit Button */
     button {
-      margin-top: 20px;
-      padding: 12px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 14px 28px;
       background: #28a745;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: bold;
+      z-index: 1000;
     }
     button:hover { background: #218838; }
 
     /* Responsive for mobile */
     @media(max-width:768px){
       .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+      button {
+        width: 90%;
+        left: 5%;
+        right: 5%;
+      }
     }
   </style>
 </head>
@@ -54,17 +66,13 @@
   <h2>Customer & Mobile Details / Policy Holder Details</h2>
   <form id="dataForm">
     <div class="form-grid">
-      <div>
-        <label>Customer Name</label><input name="CustomerName" required>
-      </div>
-      <div>
-        <label>Gender</label>
+      <div><label>Customer Name</label><input name="CustomerName" required></div>
+      <div><label>Gender</label>
         <select name="Gender"><option>Male</option><option>Female</option><option>Other</option></select>
       </div>
-
       <div><label>Date of Birth</label><input type="date" name="DOB"></div>
-      <div><label>Aadhar Number</label><input name="Aadhar"></div>
 
+      <div><label>Aadhar Number</label><input name="Aadhar"></div>
       <div><label>Mobile Number</label><input name="Mobile"></div>
       <div><label>Email ID</label><input type="email" name="Email"></div>
 
@@ -72,18 +80,17 @@
 
       <div><label>Mobile Model</label><input name="MobileModel"></div>
       <div><label>IMEI Number 1</label><input name="IMEI1"></div>
-
       <div><label>IMEI Number 2</label><input name="IMEI2"></div>
-      <div><label>Buying Date</label><input type="date" name="BuyingDate"></div>
 
+      <div><label>Buying Date</label><input type="date" name="BuyingDate"></div>
       <div><label>Invoice Number</label><input name="Invoice"></div>
       <div><label>Warranty Status</label><input name="Warranty"></div>
 
       <div><label>Insurance Valid Upto</label><input type="date" name="InsuranceValid"></div>
       <div><label>Insurance Premium</label><input name="InsurancePremium"></div>
-
       <div><label>Payment Mode</label><input name="PaymentMode"></div>
-      <div><label>Uploaded Documents? (Yes/No)</label>
+
+      <div><label>Uploaded Documents?</label>
         <select name="DocsUploaded"><option>Yes</option><option>No</option></select>
       </div>
 
@@ -94,10 +101,9 @@
     <div class="form-grid">
       <div><label>Dealer Name</label><input name="DealerName"></div>
       <div><label>Shop Name</label><input name="ShopName"></div>
-
       <div><label>Dealer Contact</label><input name="DealerContact"></div>
-      <div><label>Dealer ID</label><input name="DealerID"></div>
 
+      <div><label>Dealer ID</label><input name="DealerID"></div>
       <div class="full-width"><label>Dealer Address</label><textarea name="DealerAddress"></textarea></div>
     </div>
 
