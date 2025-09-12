@@ -7,7 +7,7 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     h2 { background: #0d6efd; color: #fff; padding: 10px; border-radius: 5px; }
-    form { max-width: auto; margin: auto; }
+    form { max-width: 800px; margin: auto; }
     label { display: block; margin-top: 10px; font-weight: bold; }
     input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
     button { margin-top: 20px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
@@ -51,13 +51,16 @@
   </form>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzu-r7NYtWuekD-3wQ2BmMyR_4gMtENpAFQrAp4T_Z0015CAIn-D1qbWkYRLAA9820P/exec"; // यहां अपना Google Apps Script link डालो
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzu-r7NYtWuekD-3wQ2BmMyR_4gMtENpAFQrAp4T_Z0015CAIn-D1qbWkYRLAA9820P/exec"; 
     const form = document.getElementById("dataForm");
 
     form.addEventListener("submit", e => {
       e.preventDefault();
       fetch(scriptURL, { method: "POST", body: new FormData(form)})
-        .then(response => alert("✅ Form Submitted Successfully!"))
+        .then(response => {
+          alert("✅ Form Submitted Successfully!");
+          form.reset(); // submit के बाद form खाली हो जाएगा
+        })
         .catch(error => alert("❌ Error: " + error.message));
     });
   </script>
