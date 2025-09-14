@@ -17,10 +17,7 @@
 <body>
   <h2>Customer & Mobile Details / Policy Holder Details</h2>
   <form id="dataForm">
-    
-    <label>Customer Name</label><input name="CustomerName" required>
-    <label>Gender</label>
-    <select name="Gender"><option>Male</option><option>Female</option><option>Other</option></select>
+    <label>Customer Name</label><input name="CustomerName">
     <label>Date of Birth</label><input type="date" name="DOB">
     <label>Aadhar Number</label><input name="Aadhar">
     <label>Mobile Number</label><input name="Mobile">
@@ -28,7 +25,6 @@
     <label>Address</label><textarea name="Address"></textarea>
     <button type="submit">Submit</button>
   </form>
-
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwHXdAgWSvD8IA3-ZCHhho_PLlML50lK_6aaoYfiSOzqBtZF4XFAE4asjlBASlZwrGP/exec"; 
     const form = document.getElementById("dataForm");
