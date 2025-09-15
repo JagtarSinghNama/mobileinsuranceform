@@ -63,30 +63,30 @@
 
   <div id="msg" class="msg"></div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzvk8bMVviLZsMlWkf42QQKxbANJ8sy_r8YYSm1y2L6vKoR6EnPFY7C-uR0yybh6qnK/exec";
-    const form = document.getElementById("dataForm");
-    const msg = document.getElementById("msg");
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwDmPZoaas3wujUFoXQMJUYAyRMOI8HEcWK7VpvdupIbbgkaf2ioFNIYRR2H5j7Lr7L/exec";
+  const form = document.getElementById("dataForm");
+  const msg = document.getElementById("msg");
 
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      fetch(scriptURL, { method: "POST", body: new FormData(form)})
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === "success") {
-            msg.className = "msg success";
-            msg.textContent = "✅ " + data.message + " | Insurance ID: " + data.insuranceId;
-            form.reset();
-          } else {
-            msg.className = "msg error";
-            msg.textContent = "❌ Error: " + data.message;
-          }
-        })
-        .catch(error => {
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    fetch(scriptURL, { method: "POST", body: new FormData(form)})
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "success") {
+          msg.className = "msg success";
+          msg.textContent = "✅ " + data.message + " | Insurance ID: " + data.insuranceId;
+          form.reset();
+        } else {
           msg.className = "msg error";
-          msg.textContent = "⚠️ Script Error: " + error.message;
-        });
-    });
-  </script>
+          msg.textContent = "❌ Error: " + data.message;
+        }
+      })
+      .catch(error => {
+        msg.className = "msg error";
+        msg.textContent = "⚠️ Script Error: " + error.message;
+      });
+  });
+</script>
 </body>
 </html>
