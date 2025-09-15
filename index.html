@@ -104,7 +104,7 @@
     <div id="printArea" class="card-wrap">
       <div id="receiptCard" class="card" role="region" aria-label="Insurance Receipt">
         <h2>Insurance Receipt</h2>
-        <p><strong>Customer:</strong> <span id="rCustomer">-</span></p>
+        <p><strong>Customer Name:</strong> <span id="rCustomer">-</span></p>
         <p><strong>Insurance ID:</strong> <span id="rInsId" class="big">-</span></p>
         <p><strong>Valid Upto:</strong> <span id="rValid">-</span></p>
         <p><strong>Mobile:</strong> <span id="rMobile">-</span></p>
@@ -123,10 +123,8 @@
   </div>
 
   <script>
-    // ------------------------
-    // SET THIS to your deployed Apps Script webapp URL
-    // ------------------------
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyv_MBjWqhMLMvX3S1yha19-Sc9ed41zHib7rY6dPlL4sVCWtzShn7ia41emy4K9JGK/exec";
+    // ✅ अब आपका नया deploy link
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz8tUm1mQizvCrRdqoVTgRGpJzU3-FDtAqAES4MaIu9ipqkec7HvJL-rBa5X-Qd9oVs/exec";
 
     const form = document.getElementById('dataForm');
     const errorBox = document.getElementById('errorBox');
@@ -146,7 +144,6 @@
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       errorBox.style.display = 'none';
-      // client-side basic validation
       const fd = new FormData(form);
       const mobile = (fd.get('Mobile') || '').trim();
       const aadhar = (fd.get('Aadhar') || '').trim();
@@ -154,7 +151,7 @@
         showError('Mobile या Aadhar कम से कम एक दर्ज करें।');
         return;
       }
-      // disable submit to avoid double-click
+
       const submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Submitting...';
@@ -169,7 +166,7 @@
             showError('❌ ' + msg);
             return;
           }
-          // success -> show receipt card and populate fields
+
           rCustomer.textContent = data.customerName || (fd.get('CustomerName') || '');
           rInsId.textContent = data.insuranceId || '';
           rValid.textContent = data.validUpto || (fd.get('ValidUpto') || '');
@@ -179,12 +176,9 @@
           rDealerMobile.textContent = data.dealerMobile || (fd.get('DealerContact') || '');
           rShop.textContent = data.shopName || (fd.get('ShopName') || '');
 
-          // show the card and print button
           receiptCard.style.display = 'block';
           cardActions.style.display = 'block';
-          // hide form
           form.style.display = 'none';
-          // scroll to card
           setTimeout(()=>{ receiptCard.scrollIntoView({behavior:'smooth'}); }, 100);
         })
         .catch(err => {
