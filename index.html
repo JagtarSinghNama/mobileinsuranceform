@@ -12,81 +12,91 @@
     input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
     button { margin-top: 20px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background: #218838; }
-    #resultBox { margin: 20px auto; max-width: 900px; padding: 15px; border-radius: 5px; display: none; }
-    #resultBox.success { background: #d4edda; color: #155724; }
-    #resultBox.error { background: #f8d7da; color: #721c24; }
+    #msg { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
+    #msg.success { background: #d4edda; color: #155724; }
+    #msg.error { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
-  <h2>Customer & Mobile Insurance Form</h2>
+  <h2>Mobile Insurance Form</h2>
   <form id="dataForm">
+    <!-- Customer Details -->
     <label>Customer Name</label><input name="CustomerName" required>
     <label>Gender</label>
     <select name="Gender" required>
-      <option value="">Select</option>
+      <option value="">--Select--</option>
       <option>Male</option>
       <option>Female</option>
       <option>Other</option>
     </select>
     <label>Date of Birth</label><input type="date" name="DateOfBirth" required>
-    <label>Aadhar Number</label><input name="Aadhar" required>
-    <label>Mobile Number</label><input name="Mobile" required>
+    <label>Aadhar Number</label><input name="Aadhar" maxlength="12" required>
+    <label>Mobile Number</label><input name="Mobile" maxlength="10" required>
     <label>Email ID</label><input type="email" name="Email">
     <label>Address</label><textarea name="Address"></textarea>
+
+    <!-- Mobile Details -->
     <label>Mobile Model</label><input name="MobileModel" required>
     <label>IMEI Number 1</label><input name="IMEI1" required>
     <label>IMEI Number 2</label><input name="IMEI2">
     <label>Buying Date</label><input type="date" name="BuyingDate" required>
-    <label>Bill Number</label><input name="BillNumber" required>
+    <label>Bill Number</label><input name="BillNumber">
     <label>Warranty Status</label>
     <select name="WarrantyStatus" required>
-      <option value="">Select</option>
+      <option value="">--Select--</option>
       <option>Yes</option>
       <option>No</option>
     </select>
-    <label>Insurance Valid Upto</label><input type="date" name="InsuranceValidUpto" required>
-    <label>Insurance Premium</label><input name="InsurancePremium" required>
+    <label>Insurance Valid Upto</label><input type="date" name="ValidUpto">
+    <label>Insurance Premium</label><input type="number" name="Premium">
+
+    <!-- Payment Details -->
     <label>Payment Mode</label>
     <select name="PaymentMode" required>
-      <option value="">Select</option>
+      <option value="">--Select--</option>
       <option>Online</option>
       <option>Offline</option>
     </select>
     <label>Remarks / Notes</label><textarea name="Remarks"></textarea>
+
+    <!-- Dealer Details -->
     <label>Dealer Name</label><input name="DealerName">
     <label>Shop Name</label><input name="ShopName">
     <label>Dealer Contact</label><input name="DealerContact">
     <label>Dealer ID</label><input name="DealerID">
     <label>Dealer Address</label><textarea name="DealerAddress"></textarea>
+
     <button type="submit">Submit</button>
   </form>
 
-  <div id="resultBox"></div>
+  <div id="msg"></div>
 
   <script>
-    const scriptURL = "YOUR_SCRIPT_URL_HERE"; // Replace with your deployed Apps Script URL
+    const scriptURL = "YOUR_SCRIPT_URL_HERE"; // 👈 apna Apps Script URL yaha daalo
     const form = document.getElementById("dataForm");
-    const resultBox = document.getElementById("resultBox");
+    const msg = document.getElementById("msg");
 
     form.addEventListener("submit", e => {
       e.preventDefault();
+      msg.style.display = "block";
+      msg.className = "";
+      msg.textContent = "⏳ Please wait...";
+
       fetch(scriptURL, { method: "POST", body: new FormData(form)})
         .then(res => res.json())
         .then(data => {
-          resultBox.style.display = "block";
           if (data.result === "success") {
-            resultBox.className = "success";
-            resultBox.innerHTML = "✅ " + data.message + "<br><b>Your Insurance ID:</b> " + data.insuranceId;
+            msg.className = "success";
+            msg.textContent = "✅ " + data.message + " | Insurance ID: " + data.insuranceId;
             form.reset();
           } else {
-            resultBox.className = "error";
-            resultBox.innerHTML = "❌ Error: " + data.message;
+            msg.className = "error";
+            msg.textContent = "❌ Error: " + data.message;
           }
         })
         .catch(error => {
-          resultBox.style.display = "block";
-          resultBox.className = "error";
-          resultBox.innerHTML = "⚠️ Script Error: " + error.message;
+          msg.className = "error";
+          msg.textContent = "⚠️ Script Error: " + error.message;
         });
     });
   </script>
