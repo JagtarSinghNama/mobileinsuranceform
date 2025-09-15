@@ -1,92 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Insurance Form</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mobile Insurance Form — Submit & Print Card</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-    h2 { background: #0d6efd; color: #fff; padding: 10px; border-radius: 5px; }
-    form { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
-    button { margin-top: 20px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #218838; }
-    .msg { margin-top: 15px; padding: 10px; border-radius: 5px; font-weight: bold; }
-    .success { background: #d4edda; color: #155724; }
-    .error { background: #f8d7da; color: #721c24; }
+    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:20px; }
+    .container { max-width:900px; margin:0 auto; }
+    h1 { background:#0d6efd; color:#fff; padding:12px; border-radius:6px; margin-bottom:16px; }
+    form, .card-wrap, .error-box {
+      background:#fff; border-radius:10px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom:18px;
+    }
+    label { display:block; margin-top:10px; font-weight:600; font-size:14px; }
+    input, select, textarea {
+      width:100%; padding:8px 10px; margin-top:6px; border:1px solid #d0d7de; border-radius:6px;
+      box-sizing:border-box; font-size:14px;
+    }
+    textarea { min-height:70px; resize:vertical; }
+    button { margin-top:16px; padding:10px 14px; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+    .btn-submit { background:#28a745; color:#fff; }
+    .btn-submit:hover { background:#218838; }
+    .card { display:none; max-width:520px; margin:0 auto; border-radius:12px; padding:18px; background:linear-gradient(180deg,#ffffff,#f8fbff); border:1px solid #cfe2ff; }
+    .card h2 { margin:0 0 8px; color:#08306b; font-size:20px; }
+    .card .big { font-size:18px; font-weight:700; color:#0d6efd; margin:6px 0; }
+    .card p { margin:6px 0; font-size:14px; color:#333; }
+    .actions { text-align:center; margin-top:12px; }
+    .btn-print { background:#0d6efd; color:#fff; margin-right:8px; }
+    .btn-new { background:#6c757d; color:#fff; }
+    .error-box { display:none; color:#721c24; background:#f8d7da; border:1px solid #f5c6cb; }
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width:100%; }
+    }
   </style>
 </head>
 <body>
-  <h2>Customer & Mobile Insurance Details</h2>
-  <form id="dataForm">
-    <label>Customer Name</label><input name="CustomerName" required>
-    <label>Gender</label>
-    <select name="Gender" required>
-      <option value="">Select</option>
-      <option>Male</option>
-      <option>Female</option>
-      <option>Other</option>
-    </select>
-    <label>Date of Birth</label><input type="date" name="DateOfBirth" required>
-    <label>Aadhar Number</label><input name="Aadhar" maxlength="12" required>
-    <label>Mobile Number</label><input name="Mobile" maxlength="10" required>
-    <label>Email ID</label><input type="email" name="Email">
-    <label>Address</label><textarea name="Address"></textarea>
-    <label>Mobile Model</label><input name="MobileModel">
-    <label>IMEI Number 1</label><input name="IMEI1">
-    <label>IMEI Number 2</label><input name="IMEI2">
-    <label>Buying Date</label><input type="date" name="BuyingDate">
-    <label>Bill Number</label><input name="BillNumber">
-    <label>Warranty Status</label>
-    <select name="WarrantyStatus">
-      <option value="">Select</option>
-      <option>Yes</option>
-      <option>No</option>
-    </select>
-    <label>Insurance Valid Upto</label><input type="date" name="ValidUpto">
-    <label>Insurance Premium</label><input name="Premium">
-    <label>Payment Mode</label>
-    <select name="PaymentMode">
-      <option value="">Select</option>
-      <option>Online</option>
-      <option>Offline</option>
-    </select>
-    <label>Remarks / Notes</label><textarea name="Remarks"></textarea>
-    <label>Dealer Name</label><input name="DealerName">
-    <label>Shop Name</label><input name="ShopName">
-    <label>Dealer Contact</label><input name="DealerContact">
-    <label>Dealer ID</label><input name="DealerID">
-    <label>Dealer Address</label><textarea name="DealerAddress"></textarea>
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <h1>Mobile Insurance — Registration</h1>
 
-  <div id="msg" class="msg"></div>
+    <!-- Error box -->
+    <div id="errorBox" class="error-box"></div>
 
-<script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbwDmPZoaas3wujUFoXQMJUYAyRMOI8HEcWK7VpvdupIbbgkaf2ioFNIYRR2H5j7Lr7L/exec";
-  const form = document.getElementById("dataForm");
-  const msg = document.getElementById("msg");
+    <!-- FORM -->
+    <form id="dataForm" class="form">
+      <label>Customer Name</label>
+      <input name="CustomerName" required />
 
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    fetch(scriptURL, { method: "POST", body: new FormData(form)})
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === "success") {
-          msg.className = "msg success";
-          msg.textContent = "✅ " + data.message + " | Insurance ID: " + data.insuranceId;
-          form.reset();
-        } else {
-          msg.className = "msg error";
-          msg.textContent = "❌ Error: " + data.message;
-        }
-      })
-      .catch(error => {
-        msg.className = "msg error";
-        msg.textContent = "⚠️ Script Error: " + error.message;
-      });
-  });
-</script>
+      <label>Gender</label>
+      <select name="Gender" required>
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+      <label>Date of Birth</label>
+      <input type="date" name="DateOfBirth" />
+
+      <label>Aadhar Number</label>
+      <input name="Aadhar" maxlength="12" />
+
+      <label>Mobile Number</label>
+      <input name="Mobile" maxlength="10" required />
+
+      <label>Email</label>
+      <input type="email" name="Email" />
+
+      <label>Address</label>
+      <textarea name="Address"></textarea>
+
+      <label>Mobile Model</label>
+      <input name="MobileModel" />
+
+      <label>IMEI 1</label><input name="IMEI1" />
+      <label>IMEI 2</label><input name="IMEI2" />
+
+      <label>Buying Date</label><input type="date" name="BuyingDate" />
+      <label>Bill Number</label><input name="BillNumber" />
+
+      <label>Warranty Status</label>
+      <select name="WarrantyStatus"><option value="">Select</option><option>Yes</option><option>No</option></select>
+
+      <label>Insurance Valid Upto</label><input type="date" name="ValidUpto" />
+
+      <label>Premium</label><input name="Premium" />
+      <label>Payment Mode</label>
+      <select name="PaymentMode"><option value="">Select</option><option>Online</option><option>Offline</option></select>
+
+      <label>Remarks</label><textarea name="Remarks"></textarea>
+
+      <label>Dealer Name</label><input name="DealerName" />
+      <label>Shop Name</label><input name="ShopName" />
+      <label>Dealer Contact</label><input name="DealerContact" />
+      <label>Dealer ID</label><input name="DealerID" />
+      <label>Dealer Address</label><textarea name="DealerAddress"></textarea>
+
+      <button class="btn-submit" type="submit">Submit</button>
+    </form>
+
+    <!-- Receipt card (print area) -->
+    <div id="printArea" class="card-wrap">
+      <div id="receiptCard" class="card" role="region" aria-label="Insurance Receipt">
+        <h2>Insurance Receipt</h2>
+        <p><strong>Customer:</strong> <span id="rCustomer">-</span></p>
+        <p><strong>Insurance ID:</strong> <span id="rInsId" class="big">-</span></p>
+        <p><strong>Valid Upto:</strong> <span id="rValid">-</span></p>
+        <p><strong>Mobile:</strong> <span id="rMobile">-</span></p>
+        <hr />
+        <p><strong>Dealer:</strong> <span id="rDealer">-</span></p>
+        <p><strong>Dealer ID:</strong> <span id="rDealerId">-</span></p>
+        <p><strong>Dealer Mobile:</strong> <span id="rDealerMobile">-</span></p>
+        <p><strong>Shop:</strong> <span id="rShop">-</span></p>
+      </div>
+
+      <div class="actions" id="cardActions" style="display:none;">
+        <button class="btn-print" onclick="window.print()">🖨️ Print Card</button>
+        <button class="btn-new" onclick="location.reload()">➕ New Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ------------------------
+    // SET THIS to your deployed Apps Script webapp URL
+    // ------------------------
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyv_MBjWqhMLMvX3S1yha19-Sc9ed41zHib7rY6dPlL4sVCWtzShn7ia41emy4K9JGK/exec";
+
+    const form = document.getElementById('dataForm');
+    const errorBox = document.getElementById('errorBox');
+    const receiptCard = document.getElementById('receiptCard');
+    const cardActions = document.getElementById('cardActions');
+
+    // receipt fields
+    const rCustomer = document.getElementById('rCustomer');
+    const rInsId = document.getElementById('rInsId');
+    const rValid = document.getElementById('rValid');
+    const rMobile = document.getElementById('rMobile');
+    const rDealer = document.getElementById('rDealer');
+    const rDealerId = document.getElementById('rDealerId');
+    const rDealerMobile = document.getElementById('rDealerMobile');
+    const rShop = document.getElementById('rShop');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      // client-side basic validation
+      const fd = new FormData(form);
+      const mobile = (fd.get('Mobile') || '').trim();
+      const aadhar = (fd.get('Aadhar') || '').trim();
+      if (!mobile && !aadhar) {
+        showError('Mobile या Aadhar कम से कम एक दर्ज करें।');
+        return;
+      }
+      // disable submit to avoid double-click
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      fetch(scriptURL, { method: 'POST', body: fd })
+        .then(resp => resp.json())
+        .then(data => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+          if (!data || data.result !== 'success') {
+            const msg = data && data.message ? data.message : 'Server error';
+            showError('❌ ' + msg);
+            return;
+          }
+          // success -> show receipt card and populate fields
+          rCustomer.textContent = data.customerName || (fd.get('CustomerName') || '');
+          rInsId.textContent = data.insuranceId || '';
+          rValid.textContent = data.validUpto || (fd.get('ValidUpto') || '');
+          rMobile.textContent = data.mobile || (fd.get('Mobile') || '');
+          rDealer.textContent = data.dealerName || (fd.get('DealerName') || '');
+          rDealerId.textContent = data.dealerId || (fd.get('DealerID') || '');
+          rDealerMobile.textContent = data.dealerMobile || (fd.get('DealerContact') || '');
+          rShop.textContent = data.shopName || (fd.get('ShopName') || '');
+
+          // show the card and print button
+          receiptCard.style.display = 'block';
+          cardActions.style.display = 'block';
+          // hide form
+          form.style.display = 'none';
+          // scroll to card
+          setTimeout(()=>{ receiptCard.scrollIntoView({behavior:'smooth'}); }, 100);
+        })
+        .catch(err => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+          showError('⚠️ Script Error: ' + (err.message || err));
+        });
+    });
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
