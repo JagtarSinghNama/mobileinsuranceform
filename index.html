@@ -12,19 +12,18 @@
     input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
     button { margin-top: 20px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background: #218838; }
-    #msg { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
-    #msg.success { background: #d4edda; color: #155724; }
-    #msg.error { background: #f8d7da; color: #721c24; }
+    .msg { margin-top: 15px; padding: 10px; border-radius: 5px; font-weight: bold; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
-  <h2>Mobile Insurance Form</h2>
+  <h2>Customer & Mobile Insurance Details</h2>
   <form id="dataForm">
-    <!-- Customer Details -->
     <label>Customer Name</label><input name="CustomerName" required>
     <label>Gender</label>
     <select name="Gender" required>
-      <option value="">--Select--</option>
+      <option value="">Select</option>
       <option>Male</option>
       <option>Female</option>
       <option>Other</option>
@@ -34,68 +33,57 @@
     <label>Mobile Number</label><input name="Mobile" maxlength="10" required>
     <label>Email ID</label><input type="email" name="Email">
     <label>Address</label><textarea name="Address"></textarea>
-
-    <!-- Mobile Details -->
-    <label>Mobile Model</label><input name="MobileModel" required>
-    <label>IMEI Number 1</label><input name="IMEI1" required>
+    <label>Mobile Model</label><input name="MobileModel">
+    <label>IMEI Number 1</label><input name="IMEI1">
     <label>IMEI Number 2</label><input name="IMEI2">
-    <label>Buying Date</label><input type="date" name="BuyingDate" required>
+    <label>Buying Date</label><input type="date" name="BuyingDate">
     <label>Bill Number</label><input name="BillNumber">
     <label>Warranty Status</label>
-    <select name="WarrantyStatus" required>
-      <option value="">--Select--</option>
+    <select name="WarrantyStatus">
+      <option value="">Select</option>
       <option>Yes</option>
       <option>No</option>
     </select>
     <label>Insurance Valid Upto</label><input type="date" name="ValidUpto">
-    <label>Insurance Premium</label><input type="number" name="Premium">
-
-    <!-- Payment Details -->
+    <label>Insurance Premium</label><input name="Premium">
     <label>Payment Mode</label>
-    <select name="PaymentMode" required>
-      <option value="">--Select--</option>
+    <select name="PaymentMode">
+      <option value="">Select</option>
       <option>Online</option>
       <option>Offline</option>
     </select>
     <label>Remarks / Notes</label><textarea name="Remarks"></textarea>
-
-    <!-- Dealer Details -->
     <label>Dealer Name</label><input name="DealerName">
     <label>Shop Name</label><input name="ShopName">
     <label>Dealer Contact</label><input name="DealerContact">
     <label>Dealer ID</label><input name="DealerID">
     <label>Dealer Address</label><textarea name="DealerAddress"></textarea>
-
     <button type="submit">Submit</button>
   </form>
 
-  <div id="msg"></div>
+  <div id="msg" class="msg"></div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyKrkKv8_cBkvJYOZH1h9EEguQSuhhNXTj_xXshGSISTULxc-bkZ-2V5gdsKPrZLPlK/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzpW4X0mFlujzgOEd2QJNOAF8UiSQes_e3rsueYqh_7UEBlsXURmz_BEiZK8_3iHTJI/exec";
     const form = document.getElementById("dataForm");
     const msg = document.getElementById("msg");
 
     form.addEventListener("submit", e => {
       e.preventDefault();
-      msg.style.display = "block";
-      msg.className = "";
-      msg.textContent = "⏳ Please wait...";
-
       fetch(scriptURL, { method: "POST", body: new FormData(form)})
         .then(res => res.json())
         .then(data => {
           if (data.result === "success") {
-            msg.className = "success";
+            msg.className = "msg success";
             msg.textContent = "✅ " + data.message + " | Insurance ID: " + data.insuranceId;
             form.reset();
           } else {
-            msg.className = "error";
+            msg.className = "msg error";
             msg.textContent = "❌ Error: " + data.message;
           }
         })
         .catch(error => {
-          msg.className = "error";
+          msg.className = "msg error";
           msg.textContent = "⚠️ Script Error: " + error.message;
         });
     });
