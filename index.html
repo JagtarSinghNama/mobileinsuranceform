@@ -25,23 +25,23 @@
     <button type="submit">Submit</button>
   </form>
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwHXdAgWSvD8IA3-ZCHhho_PLlML50lK_6aaoYfiSOzqBtZF4XFAE4asjlBASlZwrGP/exec"; 
-    const form = document.getElementById("dataForm");
+  const scriptURL = "https://script.google.com/macros/s/AKfycby6nDzRD8DxIb3DniChs4vbcept0_3SfnKY8MztHCwyT_BxvFRL2ghl_yZHULf2pHJo/exec"; 
+  const form = document.getElementById("dataForm");
 
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      fetch(scriptURL, { method: "POST", body: new FormData(form)})
-        .then(res => res.json())
-        .then(data => {
-          if (data.result === "success") {
-            alert("✅ " + data.message);
-            form.reset();
-          } else {
-            alert("❌ Error: " + data.message);
-          }
-        })
-        .catch(error => alert("⚠️ Script Error: " + error.message));
-    });
-  </script>
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    fetch(scriptURL, { method: "POST", body: new FormData(form)})
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "success") {
+          alert("✅ " + data.message);
+          form.reset();
+        } else {
+          alert("❌ Error: " + data.message);
+        }
+      })
+      .catch(error => alert("⚠️ Script Error: " + error.message));
+  });
+</script>
 </body>
 </html>
